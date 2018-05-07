@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package 
+			uri = "http://www.aut.edu/islab/ghaemi/minuy/MyUiDsl"
+			class = "edu.aut.islab.ghaemi.minuy.myUiDsl.MyUiDslPackage"
+			genModel = "model/generated/MyUiDsl.genmodel" />
+	</extension>
+</plugin>

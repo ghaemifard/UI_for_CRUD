@@ -1,0 +1,204 @@
+grammar edu.aut.islab.ghaemi.minuy.MyUiDsl with org.eclipse.xtext.common.Terminals
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+generate myUiDsl "http://www.aut.edu/islab/ghaemi/minuy/MyUiDsl"
+
+
+Model:
+	heads+=Head*  '|' bodis+=Body+ '|' accessories+=Accessory* ;
+	
+Head:
+	'import' fileName=ID 'as' headType=HeadType ';'
+;
+
+
+HeadType:
+	'_CSS' | '_JS' | OneChar 
+;
+
+ 	
+Body:
+	name=Node '->' right+= Node+  selfRepeat=SelfRepeat? ';'
+;
+
+Node:
+	name=OneChar
+;
+ 
+SelfRepeat:
+	number=INT vertical?='*'?
+;
+
+
+Accessory:
+	left=Node ':'  (text=InnerText? & style=InnerStyle? & clazz=InnerClass? & type=InnerType?  & feature=InnerFeature?)
+;
+InnerFeature:
+	  {InnerFeature} (value=STRING2   )
+;
+InnerText:
+	'<' value= ID '>'
+;
+InnerStyle:
+	'(' {InnerStyle} styles+=CssStyle* ')'
+;
+InnerClass:
+	'[' clazzes=ClassName ']'
+;
+ClassName:
+	theId=ID? clazz+=ClassNameSec*
+;
+ClassNameSec:
+	 ',' cfClazz=ID 
+;
+
+InnerType:
+	'{' value=InnerTypeArray '}'
+;
+CssStyles:
+	styles=CssStyle
+;
+CssStyle:
+	(Pos | Flt | Clr | Disp | VerAl | Wid | H8 | Coord | OFlow | Marg | Padd | Border | BorderRad | Color | BackColor) ';' 
+;
+Border:
+	'border:' value=colorDef  
+;
+Color:
+	'color:' value=colorDef  
+;
+BackColor:
+	'bcolor:' value=colorDef  
+;
+ colorDef: 
+	LiteralColor | RgbaColor	
+;
+LiteralColor: 
+	value=("Red" | "Blue"| "Black" | "Green" | "Yellow" | "Pink" | "Brown" | "Gold" | "White" | "Grey")
+	 
+;
+RgbaColor:  
+	'rgba(' ((rval=Rval?) & (gval=Gval?) & (bval=Bval?) & (aval=Aval?) ) ')'
+;
+
+Rval:
+	value=INT 'red'
+;
+Gval:
+	value=INT 'grn'
+;
+Bval:
+	value=INT 'blu'
+;
+Aval:
+	value=INT 'alfa'
+;
+
+BorderRad:
+	'Arc:' value=INT  measureType=measureType?
+;
+ 
+Pos:
+	'Pos:' value= PosVals
+;
+enum PosVals:
+	Static | Relative | Fixed | Absolute | Steaky
+;
+Flt:
+	'Flt:' value= FltVals
+;
+enum FltVals:
+	Left | Right | None | Start | End
+;
+Clr:
+	'Clr:' value= ClrVals
+;
+enum ClrVals:
+	Left | Right | Both | None
+;
+Disp:
+	'Disp:' value= DispVals
+;
+enum DispVals:
+	Block | Inline | InBl | Table | None
+;
+VerAl:
+	'Ver_Al:' value= VeralVals
+;
+enum VeralVals:
+	Top | Down | Center 
+;
+OFlow:
+	'OFlow:' value=OFlowVals
+;
+enum OFlowVals:
+	Scroll | Visible | Hidden | Auto 
+;
+Wid:
+	'Wid:' value=MinMaxValue
+;
+H8:
+	'H8:' value=MinMaxValue
+;
+
+
+
+Coord:
+	'Coord:' value=FourAspect
+;
+Marg:
+	'Marg:' value=FourAspect  
+;
+Padd:
+	'Padd:' value=FourAspect  
+;
+MinMaxValue:
+	{MinMaxValue} ( minVal= MinVal? & maxVal= MaxVal? & midVal= MidVal?)
+;
+MinVal:
+	value=INT 'lo' measureType=measureType?
+;
+MaxVal:
+	value=INT 'hi' measureType=measureType?
+;
+MidVal:
+	value=INT measureType=measureType?
+;
+
+
+FourAspect:
+    {FourAspect} (left=LeftAspect? & right=RightAspect? & up=UpAspect? & down=DownAspect?)
+;
+
+LeftAspect:
+	value=INT 'le' measureType=measureType?
+;
+
+RightAspect:
+	value=INT 'ri' measureType=measureType?
+;
+
+UpAspect:
+	value=INT 'up' measureType=measureType?
+;
+
+DownAspect:
+	value=INT 'dn' measureType=measureType?
+;
+
+
+ measureType:
+	'em' | '%' | 'px'
+;
+ 
+enum InnerTypeArray:
+	Div | Para | Input | Table | Tr | Td | Img | Form | Button 
+;
+terminal OneChar returns ecore::EChar:
+	('a'..'z' | 'A'..'Z') 
+;
+terminal STRING2	: 
+			  "'" ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|"'") )* "'"  ;
+//terminal AllStr returns ecore::EString:
+//	('a'..'z'|'A'..'Z'|'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|' '|'\t'|':'|'='|'/'|'.'|'%'|';'|'!'|'('|'*'|'&'|'_'|'-'|'+'|'~'|'<'|'>'|'"'|',')+
+//;
+//terminal PathString returns ecore::EString: ('a'..'z'|'A'..'Z'|'_'|'.' | '\\' | '/' )('a'..'z'|'A'..'Z'|'0'..'9' |'_'|'.' | '\\' | '/' )*;
