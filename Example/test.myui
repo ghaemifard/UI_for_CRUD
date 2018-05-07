@@ -1,0 +1,15 @@
+import bootstrap as _CSS;
+import dart as _JS;
+import field as p;
+
+|
+s -> f f z; 
+f -> b ;
+b -> q b 11 *; 
+b -> p;
+|
+
+s: (H8:300;Wid:600;border:Green;){Div}<Main> 
+b: [,cent](H8:97%;Wid:97%;bcolor: rgba(  100 blu 555 grn 772 red  90 alfa);) 
+f: (Arc:5;Marg:2dn 2le 2ri 2up;H8:300;Wid:300; )
+z: (Clr:Left;)' id="fakeId" '

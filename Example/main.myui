@@ -1,0 +1,8 @@
+ import test as t;
+|
+s -> d b i ;
+i-> t;
+b -> t;
+d -> t;
+| 
+s:<Main>
